@@ -1,384 +1,731 @@
-/* I define CSS variables at the root so I can reuse the brief's exact color palette everywhere */
 :root {
-    /* I set the primary purple here since it's used for the header, buttons, and focus states */
-    --primary: #6C63FF;
-    /* I set the secondary cyan here for hover effects and accents, as requested */
-    --secondary: #00D4FF;
-    /* I set the light gray background so the page feels clean and minimal */
-    --bg: #F8F9FA;
-    /* I set pure white for the card background so it pops with a subtle shadow */
-    --card-bg: #FFFFFF;
-    /* I set the dark gray text color for strong readability against the light background */
-    --text: #2D3436;
-    /* I set the green success color for the complete action, matching the brief exactly */
-    --success: #00B894;
-    /* I set the red danger color for the delete action, matching the brief exactly */
-    --danger: #FF6B6B;
-    /* I define a soft shadow variable so I keep shadow styling consistent across the app */
-    --shadow: 0 4px 20px rgba(108, 99, 255, 0.12);
+    /* Light Theme Variables */
+    --bg-main: #f4f7fe;
+    --bg-card: rgba(255, 255, 255, 0.7);
+    --bg-card-solid: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #e0e7ff;
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --danger: #ef4444;
+    --danger-light: #fee2e2;
+    --border: rgba(226, 232, 240, 0.8);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    
+    /* Global */
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* I reset all elements' margin, padding, and box-sizing so browser defaults don't cause inconsistent spacing */
+.dark-mode {
+    --bg-main: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --bg-card-solid: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --primary-light: rgba(99, 102, 241, 0.15);
+    --success: #10b981;
+    --success-light: rgba(16, 185, 129, 0.15);
+    --danger: #ef4444;
+    --danger-light: rgba(239, 68, 68, 0.15);
+    --border: rgba(51, 65, 85, 0.8);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* I style the body to set the base font, background color, and text color for the whole app */
 body {
-    /* I use Segoe UI first as required by the brief, with safe fallbacks for other systems */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* I apply the light gray background so the white card stands out */
-    background-color: var(--bg);
-    /* I apply the dark gray text color as the default for readability */
-    color: var(--text);
-    /* I add generous vertical padding so the app doesn't touch the edges of the viewport on desktop */
-    padding: 40px 16px;
-    /* I set min-height to 100vh so short task lists still fill the screen nicely */
+    background-color: var(--bg-main);
+    color: var(--text-main);
     min-height: 100vh;
-    /* I use line-height 1.5 for comfortable reading throughout the app */
-    line-height: 1.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    transition: background-color 0.5s ease;
+    position: relative;
 }
 
-/* I style the main container to center the app and cap its width per the desktop breakpoint requirement */
-.container {
-    /* I set max-width to 600px exactly as specified for the desktop layout */
-    max-width: 600px;
-    /* I center the container horizontally on wide screens */
-    margin: 0 auto;
-    /* I give the container a white card background so it's visually distinct from the page */
-    background-color: var(--card-bg);
-    /* I round the corners for a modern, soft card look */
-    border-radius: 16px;
-    /* I apply the shared shadow variable so the card lifts off the background */
-    box-shadow: var(--shadow);
-    /* I add internal padding so content doesn't touch the card edges */
-    padding: 32px;
-    /* I hide overflow so the header gradient below respects the rounded corners */
+/* Dynamic Background Shapes */
+.background-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    filter: blur(80px);
+    opacity: 0.5;
+    border-radius: 50%;
+    animation: float 20s infinite alternate;
+}
+
+.shape-1 {
+    top: -10%;
+    left: -10%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+}
+
+.shape-2 {
+    bottom: -20%;
+    right: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+    animation-delay: -5s;
+}
+
+.shape-3 {
+    top: 40%;
+    left: 40%;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(5%, 10%) scale(1.1); }
+}
+
+/* Main Container */
+.app-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    z-index: 1;
+}
+
+/* Navbar */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 15px 30px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.logo i {
+    color: var(--primary);
+    font-size: 1.8rem;
+}
+
+.logo .highlight {
+    color: var(--primary);
+}
+
+.theme-toggle {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Screens */
+.main-content {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-md);
+    min-height: 500px;
+    position: relative;
     overflow: hidden;
 }
 
-/* I style the header so the title area has its own visual identity with a gradient */
-.app-header {
-    /* I apply a gradient using both brand colors to tie the header to the palette */
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    /* I pull the header out to the card's edges using negative margins to look like a banner */
-    margin: -32px -32px 24px -32px;
-    /* I add padding inside the banner so the text has breathing room */
-    padding: 28px 32px 24px 32px;
-    /* I center the header text for a clean, balanced look */
-    text-align: center;
-}
-
-/* I style the h1 so the title is bold, white, and clearly the page's main heading */
-.app-header h1 {
-    /* I use white text so it contrasts against the purple-cyan gradient */
-    color: #FFFFFF;
-    /* I set a large font size so the heading dominates visually as the page's focal point */
-    font-size: 1.8rem;
-    /* I make the heading bold per the typography requirement */
-    font-weight: 700;
-    /* I add a subtle letter-spacing so the title feels more designed than default text */
-    letter-spacing: 0.3px;
-}
-
-/* I style the subtitle so it supports the heading without competing with it */
-.subtitle {
-    /* I use a translucent white so the subtitle sits quietly below the bold title */
-    color: rgba(255, 255, 255, 0.85);
-    /* I use a smaller font size to create clear typographic hierarchy */
-    font-size: 0.9rem;
-    /* I add a small top margin to separate it from the h1 */
-    margin-top: 4px;
-}
-
-/* I style the input section to give the form breathing room from the header and list */
-.input-section {
-    margin-bottom: 20px;
-}
-
-/* I style the form as a flex row so the input and button sit side by side */
-.todo-form {
-    display: flex;
-    /* I add a gap so the input and button don't touch each other */
-    gap: 10px;
-}
-
-/* I style the text input for a clean, modern, bordered look */
-.task-input {
-    /* I let the input grow to fill all available space next to the button */
-    flex: 1;
-    /* I add comfortable padding so the input feels easy to tap and type into */
-    padding: 12px 16px;
-    /* I give it a light border so it's defined but not heavy */
-    border: 2px solid #E5E7EB;
-    /* I round the corners to match the app's soft, modern aesthetic */
-    border-radius: 10px;
-    /* I set a readable font size for task entry */
-    font-size: 1rem;
-    /* I inherit the body font so the input matches the rest of the app's typography */
-    font-family: inherit;
-    /* I add a smooth transition so the border color change on focus feels polished */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* I style the focus state so users get clear visual feedback when typing, per accessibility best practice */
-.task-input:focus {
-    /* I remove the default outline since I'm replacing it with a custom border/shadow */
-    outline: none;
-    /* I switch the border to the primary purple so focus is obvious */
-    border-color: var(--primary);
-    /* I add a soft glow using the primary color so the focus state feels premium */
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
-}
-
-/* I style the Add button with the primary color as required by the brief */
-.add-btn {
-    /* I use the primary purple as the button's background color */
-    background-color: var(--primary);
-    /* I use white text so it contrasts clearly against the purple */
-    color: #FFFFFF;
-    /* I remove the default border since I'm using background color for definition */
-    border: none;
-    /* I round the corners to match the input field's radius */
-    border-radius: 10px;
-    /* I add padding so the button has a comfortable click/tap target */
-    padding: 12px 20px;
-    /* I set a readable, slightly bold font size for the button label */
-    font-size: 1rem;
-    font-weight: 600;
-    /* I use pointer cursor so it's clear the button is clickable */
-    cursor: pointer;
-    /* I use flex so the icon and text align neatly side by side */
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    /* I animate transform, background, and shadow so hover feels smooth, not abrupt */
-    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-    /* I prevent the button text from wrapping awkwardly on small widths */
-    white-space: nowrap;
-}
-
-/* I style the hover state so the button scales up and glows, per the brief's hover requirement */
-.add-btn:hover {
-    /* I switch to the secondary cyan on hover so users get clear interactive feedback */
-    background-color: var(--secondary);
-    /* I scale the button slightly to create a satisfying hover 'pop' */
-    transform: scale(1.05);
-    /* I add a colored shadow so the hover state feels elevated and alive */
-    box-shadow: 0 6px 16px rgba(0, 212, 255, 0.35);
-}
-
-/* I style the active (click) state so the button gives tactile feedback when pressed */
-.add-btn:active {
-    transform: scale(0.98);
-}
-
-/* I style the task list container to remove default list styling since I'm building custom cards */
-.task-list {
-    list-style: none;
-}
-
-/* I style each task item as its own card, per the brief's 'card-like container' requirement */
-.task-item {
-    /* I use flex so the task text and action buttons align in a row */
-    display: flex;
-    align-items: center;
-    /* I push the buttons to the right and text to the left using space-between */
-    justify-content: space-between;
-    /* I add a light background so each task is visually distinct from the page background */
-    background-color: var(--bg);
-    /* I add padding so the task content isn't cramped against the card edges */
-    padding: 14px 16px;
-    /* I round the corners to match the app's overall soft aesthetic */
-    border-radius: 10px;
-    /* I add margin between tasks so they don't visually merge together */
-    margin-bottom: 10px;
-    /* I add a subtle left border in the primary color so each task has a clear brand accent */
-    border-left: 4px solid var(--primary);
-    /* I animate all changes so completing/deleting tasks feels smooth rather than jarring */
-    transition: all 0.25s ease;
-}
-
-/* I style the hover state on task items so users get feedback that the row is interactive */
-.task-item:hover {
-    /* I add a subtle shadow on hover so the card feels slightly lifted */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-}
-
-/* I style completed tasks so they visually fade and stand apart from active tasks */
-.task-item.completed {
-    /* I reduce opacity so completed tasks recede visually, per the brief */
-    opacity: 0.6;
-    /* I switch the accent border to green to reflect the completed/success state */
-    border-left-color: var(--success);
-}
-
-/* I style the task text so it truncates gracefully and has room to breathe from the buttons */
-.task-text {
-    /* I let the text take up remaining space so long tasks wrap instead of overflowing */
-    flex: 1;
-    /* I add right margin so text never touches the action buttons */
-    margin-right: 12px;
-    /* I set a medium font weight for readability, per the typography requirement */
-    font-weight: 500;
-    /* I allow long words to break so very long tasks don't overflow the card on mobile */
-    word-break: break-word;
-}
-
-/* I style the strikethrough specifically for completed task text, per the brief */
-.task-item.completed .task-text {
-    text-decoration: line-through;
-    /* I lighten the text color slightly further so completed items read as 'done' at a glance */
-    color: #7f8c8d;
-}
-
-/* I group the action buttons so I can control their spacing as a unit */
-.task-actions {
-    display: flex;
-    /* I add a small gap so the complete and delete buttons don't touch */
-    gap: 8px;
-    /* I prevent the button group from shrinking and wrapping awkwardly */
-    flex-shrink: 0;
-}
-
-/* I style both action buttons with shared base styles so they look consistent as a pair */
-.action-btn {
-    /* I remove default button borders since I'm using background color for each action's identity */
-    border: none;
-    /* I make the buttons circular for a clean, icon-first look */
-    border-radius: 50%;
-    /* I set a fixed square size so both buttons are perfectly circular and easy to tap */
-    width: 34px;
-    height: 34px;
-    /* I use flex centering so the emoji icon sits perfectly in the middle of the circle */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* I set a font size so the emoji icons are clearly visible */
-    font-size: 1rem;
-    /* I use pointer cursor to signal these are clickable */
-    cursor: pointer;
-    /* I animate transform and background so button interactions feel responsive */
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-/* I style the complete button with the green success color, per the brief's color scheme */
-.complete-btn {
-    background-color: rgba(0, 184, 148, 0.15);
-    color: var(--success);
-}
-
-/* I style the complete button's hover state so it fills solid green for clear feedback */
-.complete-btn:hover {
-    background-color: var(--success);
-    color: #FFFFFF;
-    transform: scale(1.1);
-}
-
-/* I style the delete button with the red danger color, per the brief's color scheme */
-.delete-btn {
-    background-color: rgba(255, 107, 107, 0.15);
-    color: var(--danger);
-}
-
-/* I style the delete button's hover state so it fills solid red as a clear warning cue */
-.delete-btn:hover {
-    background-color: var(--danger);
-    color: #FFFFFF;
-    transform: scale(1.1);
-}
-
-/* I style the empty state so it's centered and visually quiet when there are no tasks */
-.empty-state {
-    text-align: center;
-    /* I use a muted gray so it doesn't compete with active content when it does appear */
-    color: #95a5a6;
-    /* I add vertical padding so it doesn't look cramped when the list is empty */
-    padding: 24px 0;
-    /* I italicize it slightly via font-style to differentiate it from real task text */
-    font-style: italic;
-}
-
-/* I hide the empty state by default via a utility class, toggled by script.js when tasks exist */
-.empty-state.hidden {
+.screen {
     display: none;
+    animation: fadeSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* I style the footer so the counter and copyright are visually separated from the task list above */
-.app-footer {
-    /* I add a top border so the footer feels like a distinct section */
-    border-top: 1px solid #E5E7EB;
-    margin-top: 20px;
-    padding-top: 16px;
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Category Screen */
+.screen-header {
     text-align: center;
+    margin-bottom: 40px;
 }
 
-/* I style the task counter text so it's clear but not as prominent as the header */
-.task-counter {
-    font-weight: 600;
+.screen-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.screen-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.category-card {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: var(--primary-light);
     color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    transition: var(--transition);
+}
+
+.category-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: var(--primary);
+    color: white;
+}
+
+.category-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
     margin-bottom: 8px;
+}
+
+.category-card p {
+    color: var(--text-muted);
     font-size: 0.95rem;
 }
 
-/* I style the copyright line so it's small and unobtrusive, as footers typically are */
-.copyright {
-    font-size: 0.75rem;
-    color: #b2bec3;
+/* Quiz Screen */
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-/* ===== Tablet breakpoint (768px) — I slightly reduce padding as required, keeping the same container width ===== */
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* SVG Timer */
+.timer-container {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.timer-svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.timer-circle-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 8;
+}
+
+.timer-circle-fg {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+}
+
+.timer-circle-fg.warning { stroke: #f59e0b; }
+.timer-circle-fg.danger { stroke: var(--danger); }
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+/* Progress */
+.progress-container {
+    margin-bottom: 35px;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.progress-bar-bg {
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #8b5cf6);
+    width: 0%;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Question */
+.question-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 30px;
+    color: var(--text-main);
+}
+
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.option-btn {
+    background: var(--bg-card-solid);
+    border: 2px solid var(--border);
+    padding: 18px 25px;
+    border-radius: var(--radius-md);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-main);
+    text-align: left;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-text-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.option-letter {
+    background: var(--bg-main);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.option-icon {
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--transition);
+}
+
+.option-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    transform: translateX(5px);
+    box-shadow: var(--shadow-sm);
+}
+
+.option-btn:hover:not(:disabled) .option-letter {
+    background: var(--primary);
+    color: white;
+}
+
+/* Option States */
+.option-btn.correct {
+    border-color: var(--success) !important;
+    background: var(--success-light) !important;
+}
+
+.option-btn.correct .option-letter {
+    background: var(--success) !important;
+    color: white !important;
+}
+
+.option-btn.correct .option-icon {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    color: var(--success) !important;
+}
+
+.option-btn.wrong {
+    border-color: var(--danger) !important;
+    background: var(--danger-light) !important;
+}
+
+.option-btn.wrong .option-letter {
+    background: var(--danger) !important;
+    color: white !important;
+}
+
+.option-btn.wrong .option-icon {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    color: var(--danger) !important;
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Footer Actions */
+.quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.right-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid var(--border);
+    padding: 14px 25px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background: var(--border);
+    color: var(--text-main);
+}
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.btn-back:hover {
+    color: var(--primary);
+    transform: translateX(-5px);
+}
+
+.btn-back-small {
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px 35px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+}
+
+.btn-primary:disabled {
+    background: var(--text-muted);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.5;
+}
+
+/* Results Screen */
+.results-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.results-header h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--text-main);
+}
+
+.feedback-msg {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.score-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.circular-score {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.circular-chart {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 250px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 2.5;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    transition: stroke-dasharray 1.5s ease-out;
+}
+
+.percentage-text {
+    fill: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    text-anchor: middle;
+}
+
+.stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stat-box {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
+    padding: 20px 30px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 200px;
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-box i {
+    font-size: 2rem;
+    color: var(--primary);
+    background: var(--primary-light);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.stat-info h4 {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.stat-info p {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.results-actions {
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    /* I reduce the container's internal padding slightly for tablet screens, per the brief */
-    .container {
-        padding: 24px;
+    .main-content {
+        padding: 30px 20px;
     }
-    /* I adjust the header's negative margins to match the new container padding so the banner still spans edge-to-edge */
-    .app-header {
-        margin: -24px -24px 20px -24px;
-        padding: 24px 24px 20px 24px;
+    
+    .screen-header h2 {
+        font-size: 1.8rem;
+    }
+    
+    .question-text {
+        font-size: 1.3rem;
+    }
+    
+    .score-showcase {
+        gap: 30px;
     }
 }
 
-/* ===== Mobile breakpoint (480px) — I go full width with 10px padding and smaller fonts, per the brief ===== */
 @media (max-width: 480px) {
-    /* I remove body padding almost entirely so the app uses the full mobile width, per the brief */
-    body {
+    .app-container {
         padding: 10px;
     }
-    /* I reduce container padding to 10px and drop the border radius slightly for a tighter mobile fit */
-    .container {
-        padding: 16px;
-        border-radius: 12px;
+    
+    .top-nav {
+        padding: 15px 20px;
     }
-    /* I shrink the header's negative margins to match the smaller container padding */
-    .app-header {
-        margin: -16px -16px 16px -16px;
-        padding: 20px 16px 16px 16px;
+    
+    .logo span {
+        display: none;
     }
-    /* I reduce the heading font size so it fits comfortably on small screens */
-    .app-header h1 {
-        font-size: 1.4rem;
+    
+    .main-content {
+        padding: 25px 15px;
     }
-    /* I stack the input and button vertically on mobile, per the brief's 'stacked buttons' requirement */
-    .todo-form {
-        flex-direction: column;
+    
+    .category-grid {
+        grid-template-columns: 1fr;
     }
-    /* I make the Add button full width when stacked so it's easy to tap */
-    .add-btn {
-        justify-content: center;
+    
+    .option-btn {
+        padding: 15px;
+    }
+    
+    .btn-primary {
         width: 100%;
-    }
-    /* I reduce the task text font size slightly so cards feel proportionate on small screens */
-    .task-text {
-        font-size: 0.9rem;
-    }
-    /* I shrink the action buttons slightly so two of them fit comfortably next to shorter task cards */
-    .action-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
+        justify-content: center;
     }
 }
