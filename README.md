@@ -1,10 +1,10 @@
 # ✅ To-Do List App — SYNTECXHUB Task 2
 
-![To-Do List App](https://via.placeholder.com/800x400?text=To-Do+List+App)
+![To-Do List App](https://kabirsoomro.github.io/Syntexhub_TodoApp/)
 
 ## 🚀 Live Demo
 
-🔗 [View Live App](https://your-username.github.io/Syntexhub_TodoApp/)
+🔗 [View Live App](https://kabirsoomro.github.io/Syntexhub_TodoApp/)
 
 ---
 
