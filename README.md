@@ -45,3 +45,9 @@ The app allows users to:
 ---
 
 ## 📁 Project Structure
+Syntexhub_TodoApp/
+│
+├── index.html          # Main HTML file
+├── style.css           # All styling + responsiveness
+├── script.js           # All JavaScript functionality
+└── README.md           # Project documentation
