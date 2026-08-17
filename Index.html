@@ -1,0 +1,79 @@
+<!-- I declare this as an HTML5 document so browsers render it in standards mode -->
+<!DOCTYPE html>
+<!-- I set the page language to English so screen readers and browsers handle it correctly -->
+<html lang="en">
+<!-- I open the head section to hold metadata that isn't visible on the page itself -->
+<head>
+    <!-- I set UTF-8 so emojis like 📋 and special characters render correctly -->
+    <meta charset="UTF-8">
+    <!-- I add the viewport meta tag so the layout scales properly on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- I write a clear page title so it shows correctly in the browser tab -->
+    <title>My To-Do List | SYNTECXHUB Internship Task 2</title>
+    <!-- I link my external stylesheet so all styling stays separate from the HTML -->
+    <link rel="stylesheet" href="style.css">
+    <!-- I link Google Fonts as a fallback-friendly extra, but I keep Segoe UI as primary per the brief -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<!-- I open the body tag where all visible content lives -->
+<body>
+
+    <!-- Main container — I created this to hold the entire to-do list app and center it on the page -->
+    <div class="container">
+
+        <!-- Header section — I added this to give the app a title and icon per the design brief -->
+        <header class="app-header">
+            <!-- I use an h1 for the main heading since it's the single most important text on the page -->
+            <h1>📋 My To-Do List</h1>
+            <!-- I add a short subtitle so users immediately understand the app's purpose -->
+            <p class="subtitle">Stay organized, one task at a time.</p>
+        </header>
+
+        <!-- Input section — I wrapped the input and button together so I can style them as one unit -->
+        <section class="input-section">
+            <!-- I use a form so pressing Enter naturally submits the task without extra JS wiring -->
+            <form id="todo-form" class="todo-form">
+                <!-- I give the input an id so script.js can grab its value easily -->
+                <input
+                    type="text"
+                    id="task-input"
+                    class="task-input"
+                    placeholder="Add a new task..."
+                    autocomplete="off"
+                    aria-label="New task"
+                />
+                <!-- I make this a submit button so it works with both a click and the Enter key -->
+                <button type="submit" id="add-btn" class="add-btn" aria-label="Add task">
+                    <!-- I use a plus emoji as the custom icon for adding, per the brief's icon requirement -->
+                    <span class="btn-icon">➕</span>
+                    <!-- I keep a text label too so the button's purpose is clear, not just an icon -->
+                    <span class="btn-text">Add</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Task list section — I separated this so the list has its own scoped styling -->
+        <section class="list-section">
+            <!-- I use a ul because the tasks are a list of items semantically -->
+            <ul id="task-list" class="task-list">
+                <!-- I leave this empty here — script.js will populate it dynamically from localStorage -->
+            </ul>
+
+            <!-- Empty state — I hard-code this element and toggle its visibility in JS when the list is empty -->
+            <p id="empty-state" class="empty-state">No tasks yet. Add one above!</p>
+        </section>
+
+        <!-- Footer stats — I added this so the user always sees how many tasks remain -->
+        <footer class="app-footer">
+            <!-- I give this a span with an id so script.js can update just the number, not the whole sentence -->
+            <p class="task-counter">You have <span id="task-count">0</span> tasks remaining</p>
+            <!-- I add the required copyright line to credit myself and the internship -->
+            <p class="copyright">© 2026 Kabeer Soomro. Built for SYNTECXHUB Internship.</p>
+        </footer>
+
+    </div>
+
+    <!-- I link script.js at the end of the body so the DOM is fully loaded before JS runs -->
+    <script src="script.js"></script>
+</body>
+</html>
