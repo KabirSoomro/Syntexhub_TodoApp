@@ -1,0 +1,384 @@
+/* I define CSS variables at the root so I can reuse the brief's exact color palette everywhere */
+:root {
+    /* I set the primary purple here since it's used for the header, buttons, and focus states */
+    --primary: #6C63FF;
+    /* I set the secondary cyan here for hover effects and accents, as requested */
+    --secondary: #00D4FF;
+    /* I set the light gray background so the page feels clean and minimal */
+    --bg: #F8F9FA;
+    /* I set pure white for the card background so it pops with a subtle shadow */
+    --card-bg: #FFFFFF;
+    /* I set the dark gray text color for strong readability against the light background */
+    --text: #2D3436;
+    /* I set the green success color for the complete action, matching the brief exactly */
+    --success: #00B894;
+    /* I set the red danger color for the delete action, matching the brief exactly */
+    --danger: #FF6B6B;
+    /* I define a soft shadow variable so I keep shadow styling consistent across the app */
+    --shadow: 0 4px 20px rgba(108, 99, 255, 0.12);
+}
+
+/* I reset all elements' margin, padding, and box-sizing so browser defaults don't cause inconsistent spacing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* I style the body to set the base font, background color, and text color for the whole app */
+body {
+    /* I use Segoe UI first as required by the brief, with safe fallbacks for other systems */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* I apply the light gray background so the white card stands out */
+    background-color: var(--bg);
+    /* I apply the dark gray text color as the default for readability */
+    color: var(--text);
+    /* I add generous vertical padding so the app doesn't touch the edges of the viewport on desktop */
+    padding: 40px 16px;
+    /* I set min-height to 100vh so short task lists still fill the screen nicely */
+    min-height: 100vh;
+    /* I use line-height 1.5 for comfortable reading throughout the app */
+    line-height: 1.5;
+}
+
+/* I style the main container to center the app and cap its width per the desktop breakpoint requirement */
+.container {
+    /* I set max-width to 600px exactly as specified for the desktop layout */
+    max-width: 600px;
+    /* I center the container horizontally on wide screens */
+    margin: 0 auto;
+    /* I give the container a white card background so it's visually distinct from the page */
+    background-color: var(--card-bg);
+    /* I round the corners for a modern, soft card look */
+    border-radius: 16px;
+    /* I apply the shared shadow variable so the card lifts off the background */
+    box-shadow: var(--shadow);
+    /* I add internal padding so content doesn't touch the card edges */
+    padding: 32px;
+    /* I hide overflow so the header gradient below respects the rounded corners */
+    overflow: hidden;
+}
+
+/* I style the header so the title area has its own visual identity with a gradient */
+.app-header {
+    /* I apply a gradient using both brand colors to tie the header to the palette */
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    /* I pull the header out to the card's edges using negative margins to look like a banner */
+    margin: -32px -32px 24px -32px;
+    /* I add padding inside the banner so the text has breathing room */
+    padding: 28px 32px 24px 32px;
+    /* I center the header text for a clean, balanced look */
+    text-align: center;
+}
+
+/* I style the h1 so the title is bold, white, and clearly the page's main heading */
+.app-header h1 {
+    /* I use white text so it contrasts against the purple-cyan gradient */
+    color: #FFFFFF;
+    /* I set a large font size so the heading dominates visually as the page's focal point */
+    font-size: 1.8rem;
+    /* I make the heading bold per the typography requirement */
+    font-weight: 700;
+    /* I add a subtle letter-spacing so the title feels more designed than default text */
+    letter-spacing: 0.3px;
+}
+
+/* I style the subtitle so it supports the heading without competing with it */
+.subtitle {
+    /* I use a translucent white so the subtitle sits quietly below the bold title */
+    color: rgba(255, 255, 255, 0.85);
+    /* I use a smaller font size to create clear typographic hierarchy */
+    font-size: 0.9rem;
+    /* I add a small top margin to separate it from the h1 */
+    margin-top: 4px;
+}
+
+/* I style the input section to give the form breathing room from the header and list */
+.input-section {
+    margin-bottom: 20px;
+}
+
+/* I style the form as a flex row so the input and button sit side by side */
+.todo-form {
+    display: flex;
+    /* I add a gap so the input and button don't touch each other */
+    gap: 10px;
+}
+
+/* I style the text input for a clean, modern, bordered look */
+.task-input {
+    /* I let the input grow to fill all available space next to the button */
+    flex: 1;
+    /* I add comfortable padding so the input feels easy to tap and type into */
+    padding: 12px 16px;
+    /* I give it a light border so it's defined but not heavy */
+    border: 2px solid #E5E7EB;
+    /* I round the corners to match the app's soft, modern aesthetic */
+    border-radius: 10px;
+    /* I set a readable font size for task entry */
+    font-size: 1rem;
+    /* I inherit the body font so the input matches the rest of the app's typography */
+    font-family: inherit;
+    /* I add a smooth transition so the border color change on focus feels polished */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* I style the focus state so users get clear visual feedback when typing, per accessibility best practice */
+.task-input:focus {
+    /* I remove the default outline since I'm replacing it with a custom border/shadow */
+    outline: none;
+    /* I switch the border to the primary purple so focus is obvious */
+    border-color: var(--primary);
+    /* I add a soft glow using the primary color so the focus state feels premium */
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* I style the Add button with the primary color as required by the brief */
+.add-btn {
+    /* I use the primary purple as the button's background color */
+    background-color: var(--primary);
+    /* I use white text so it contrasts clearly against the purple */
+    color: #FFFFFF;
+    /* I remove the default border since I'm using background color for definition */
+    border: none;
+    /* I round the corners to match the input field's radius */
+    border-radius: 10px;
+    /* I add padding so the button has a comfortable click/tap target */
+    padding: 12px 20px;
+    /* I set a readable, slightly bold font size for the button label */
+    font-size: 1rem;
+    font-weight: 600;
+    /* I use pointer cursor so it's clear the button is clickable */
+    cursor: pointer;
+    /* I use flex so the icon and text align neatly side by side */
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* I animate transform, background, and shadow so hover feels smooth, not abrupt */
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    /* I prevent the button text from wrapping awkwardly on small widths */
+    white-space: nowrap;
+}
+
+/* I style the hover state so the button scales up and glows, per the brief's hover requirement */
+.add-btn:hover {
+    /* I switch to the secondary cyan on hover so users get clear interactive feedback */
+    background-color: var(--secondary);
+    /* I scale the button slightly to create a satisfying hover 'pop' */
+    transform: scale(1.05);
+    /* I add a colored shadow so the hover state feels elevated and alive */
+    box-shadow: 0 6px 16px rgba(0, 212, 255, 0.35);
+}
+
+/* I style the active (click) state so the button gives tactile feedback when pressed */
+.add-btn:active {
+    transform: scale(0.98);
+}
+
+/* I style the task list container to remove default list styling since I'm building custom cards */
+.task-list {
+    list-style: none;
+}
+
+/* I style each task item as its own card, per the brief's 'card-like container' requirement */
+.task-item {
+    /* I use flex so the task text and action buttons align in a row */
+    display: flex;
+    align-items: center;
+    /* I push the buttons to the right and text to the left using space-between */
+    justify-content: space-between;
+    /* I add a light background so each task is visually distinct from the page background */
+    background-color: var(--bg);
+    /* I add padding so the task content isn't cramped against the card edges */
+    padding: 14px 16px;
+    /* I round the corners to match the app's overall soft aesthetic */
+    border-radius: 10px;
+    /* I add margin between tasks so they don't visually merge together */
+    margin-bottom: 10px;
+    /* I add a subtle left border in the primary color so each task has a clear brand accent */
+    border-left: 4px solid var(--primary);
+    /* I animate all changes so completing/deleting tasks feels smooth rather than jarring */
+    transition: all 0.25s ease;
+}
+
+/* I style the hover state on task items so users get feedback that the row is interactive */
+.task-item:hover {
+    /* I add a subtle shadow on hover so the card feels slightly lifted */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* I style completed tasks so they visually fade and stand apart from active tasks */
+.task-item.completed {
+    /* I reduce opacity so completed tasks recede visually, per the brief */
+    opacity: 0.6;
+    /* I switch the accent border to green to reflect the completed/success state */
+    border-left-color: var(--success);
+}
+
+/* I style the task text so it truncates gracefully and has room to breathe from the buttons */
+.task-text {
+    /* I let the text take up remaining space so long tasks wrap instead of overflowing */
+    flex: 1;
+    /* I add right margin so text never touches the action buttons */
+    margin-right: 12px;
+    /* I set a medium font weight for readability, per the typography requirement */
+    font-weight: 500;
+    /* I allow long words to break so very long tasks don't overflow the card on mobile */
+    word-break: break-word;
+}
+
+/* I style the strikethrough specifically for completed task text, per the brief */
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    /* I lighten the text color slightly further so completed items read as 'done' at a glance */
+    color: #7f8c8d;
+}
+
+/* I group the action buttons so I can control their spacing as a unit */
+.task-actions {
+    display: flex;
+    /* I add a small gap so the complete and delete buttons don't touch */
+    gap: 8px;
+    /* I prevent the button group from shrinking and wrapping awkwardly */
+    flex-shrink: 0;
+}
+
+/* I style both action buttons with shared base styles so they look consistent as a pair */
+.action-btn {
+    /* I remove default button borders since I'm using background color for each action's identity */
+    border: none;
+    /* I make the buttons circular for a clean, icon-first look */
+    border-radius: 50%;
+    /* I set a fixed square size so both buttons are perfectly circular and easy to tap */
+    width: 34px;
+    height: 34px;
+    /* I use flex centering so the emoji icon sits perfectly in the middle of the circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* I set a font size so the emoji icons are clearly visible */
+    font-size: 1rem;
+    /* I use pointer cursor to signal these are clickable */
+    cursor: pointer;
+    /* I animate transform and background so button interactions feel responsive */
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* I style the complete button with the green success color, per the brief's color scheme */
+.complete-btn {
+    background-color: rgba(0, 184, 148, 0.15);
+    color: var(--success);
+}
+
+/* I style the complete button's hover state so it fills solid green for clear feedback */
+.complete-btn:hover {
+    background-color: var(--success);
+    color: #FFFFFF;
+    transform: scale(1.1);
+}
+
+/* I style the delete button with the red danger color, per the brief's color scheme */
+.delete-btn {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: var(--danger);
+}
+
+/* I style the delete button's hover state so it fills solid red as a clear warning cue */
+.delete-btn:hover {
+    background-color: var(--danger);
+    color: #FFFFFF;
+    transform: scale(1.1);
+}
+
+/* I style the empty state so it's centered and visually quiet when there are no tasks */
+.empty-state {
+    text-align: center;
+    /* I use a muted gray so it doesn't compete with active content when it does appear */
+    color: #95a5a6;
+    /* I add vertical padding so it doesn't look cramped when the list is empty */
+    padding: 24px 0;
+    /* I italicize it slightly via font-style to differentiate it from real task text */
+    font-style: italic;
+}
+
+/* I hide the empty state by default via a utility class, toggled by script.js when tasks exist */
+.empty-state.hidden {
+    display: none;
+}
+
+/* I style the footer so the counter and copyright are visually separated from the task list above */
+.app-footer {
+    /* I add a top border so the footer feels like a distinct section */
+    border-top: 1px solid #E5E7EB;
+    margin-top: 20px;
+    padding-top: 16px;
+    text-align: center;
+}
+
+/* I style the task counter text so it's clear but not as prominent as the header */
+.task-counter {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+/* I style the copyright line so it's small and unobtrusive, as footers typically are */
+.copyright {
+    font-size: 0.75rem;
+    color: #b2bec3;
+}
+
+/* ===== Tablet breakpoint (768px) — I slightly reduce padding as required, keeping the same container width ===== */
+@media (max-width: 768px) {
+    /* I reduce the container's internal padding slightly for tablet screens, per the brief */
+    .container {
+        padding: 24px;
+    }
+    /* I adjust the header's negative margins to match the new container padding so the banner still spans edge-to-edge */
+    .app-header {
+        margin: -24px -24px 20px -24px;
+        padding: 24px 24px 20px 24px;
+    }
+}
+
+/* ===== Mobile breakpoint (480px) — I go full width with 10px padding and smaller fonts, per the brief ===== */
+@media (max-width: 480px) {
+    /* I remove body padding almost entirely so the app uses the full mobile width, per the brief */
+    body {
+        padding: 10px;
+    }
+    /* I reduce container padding to 10px and drop the border radius slightly for a tighter mobile fit */
+    .container {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    /* I shrink the header's negative margins to match the smaller container padding */
+    .app-header {
+        margin: -16px -16px 16px -16px;
+        padding: 20px 16px 16px 16px;
+    }
+    /* I reduce the heading font size so it fits comfortably on small screens */
+    .app-header h1 {
+        font-size: 1.4rem;
+    }
+    /* I stack the input and button vertically on mobile, per the brief's 'stacked buttons' requirement */
+    .todo-form {
+        flex-direction: column;
+    }
+    /* I make the Add button full width when stacked so it's easy to tap */
+    .add-btn {
+        justify-content: center;
+        width: 100%;
+    }
+    /* I reduce the task text font size slightly so cards feel proportionate on small screens */
+    .task-text {
+        font-size: 0.9rem;
+    }
+    /* I shrink the action buttons slightly so two of them fit comfortably next to shorter task cards */
+    .action-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+}
